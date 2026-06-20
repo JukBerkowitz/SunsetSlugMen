@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://3gdouspe4j6g"]
+
+[sub_resource type="GDScript" id="GDScript_n0ej0"]
+script/source = "extends Timer
+
+@onready var player: CharacterBody2D = $\"D:/02 - Programação/Godot/jogo-2d/entities/player.tscn\"
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	if player.PlayerStatus.dead:
+		print('Dead')
+"
+
+[node name="ReloadSceneTimer" type="Timer" unique_id=1184208757]
+one_shot = true
+script = SubResource("GDScript_n0ej0")
