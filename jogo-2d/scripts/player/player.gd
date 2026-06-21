@@ -15,6 +15,7 @@ enum PlayerState{
 		down_grade,
 		slide,
 		wall_slide,
+		swimming,
 		dead
 	}
 
@@ -24,6 +25,7 @@ var status: PlayerState
 var direction = 0
 var jump_count = 0
 var jump_by_wall = 70
+var swimming_force = 70
 
 @export var max_jump_count = 2
 @export var max_speed = 180.0
@@ -51,10 +53,12 @@ func _physics_process(delta: float) -> void:
 			down_grade_state(delta)
 		PlayerState.slide:
 			slide_state(delta)
-		PlayerState.dead:
-			dead_state(delta)
 		PlayerState.wall_slide:
 			wall_slide_state(delta)
+		PlayerState.swimming:
+			swimming_state(delta)
+		PlayerState.dead:
+			dead_state(delta)
 	move_and_slide()
 	
 func go_to_idle_state():
@@ -99,7 +103,12 @@ func go_to_slide_state():
 	status = PlayerState.slide
 	anim.play("slide")
 	set_small_collider()
-
+	
+func go_to_swimming_state():
+	status = PlayerState.swimming
+	anim.play("swimming")
+	return
+	
 func go_to_dead_state():
 	if status == PlayerState.dead:
 		return
@@ -171,7 +180,7 @@ func fall_state(delta):
 	if Input.is_action_just_pressed("jump") && can_jump():
 		go_to_jump_state()
 		return
-	if left_wall_detector.is_colliding() or right_wall_detector.is_colliding():
+	if (left_wall_detector.is_colliding() or right_wall_detector.is_colliding()) && is_on_wall():
 		go_to_wall_slide_state()
 		return
 	if is_on_floor():
@@ -216,6 +225,19 @@ func wall_slide_state(delta):
 	if is_on_floor():
 		go_to_idle_state()
 	velocity.y += wall_acceleration * delta
+
+func swimming_state(delta):
+	update_direction()
+	
+	if direction:
+		velocity.x = move_toward(velocity.x, 100 * direction, 200 * delta)
+	else:
+		velocity.x = move_toward(velocity.x, 0, 200 * delta)
+	var vertical_direction = Input.get_axis("jump","down_grade")
+	if vertical_direction:
+		velocity.y =  move_toward(velocity.y, 100 * vertical_direction, 200 * delta)
+	else:
+		velocity.y = move_toward(velocity.y, 0, 200 * delta)
 	
 func dead_state(delta):
 	apply_gravity(delta)
@@ -263,6 +285,7 @@ func _on_hit_box_area_entered(area: Area2D) -> void:
 		hit_enemy(area)
 	elif area.is_in_group("LethalArea"):
 		hit_letal_area()	
+	
 
 func hit_enemy(area: Area2D):
 	if velocity.y > 0:
@@ -277,6 +300,9 @@ func hit_letal_area():
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("LethalArea"):
 		go_to_dead_state()
+	elif body.is_in_group("Water"):
+		go_to_swimming_state()
+	
 	
 func _on_reload_scene_timeout() -> void:
 	get_tree().reload_current_scene()

@@ -257,7 +257,7 @@ shape = SubResource("CapsuleShape2D_b0kkn")
 [node name="Player_Anim" type="AnimatedSprite2D" parent="." unique_id=224090389]
 sprite_frames = SubResource("SpriteFrames_i623q")
 animation = &"swimming"
-frame_progress = 0.37294123
+frame_progress = 0.4473504
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=978735673 groups=["Player"]]
 collision_mask = 84

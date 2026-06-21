@@ -1,0 +1,17 @@
+[gd_resource type="TileSet" format=3 uid="uid://caau5a3f3rl50"]
+
+[ext_resource type="Texture2D" uid="uid://c6oai5r1u3di2" path="res://sprites/tiles/5 - Misc. universal tiles/Water_frames (16 x 32).png" id="1_opbsg"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ytc0w"]
+texture = ExtResource("1_opbsg")
+0:0/animation_frame_0/duration = 0.3
+0:0/animation_frame_1/duration = 0.3
+0:0/0 = 0
+0:1/animation_frame_0/duration = 0.3
+0:1/animation_frame_1/duration = 0.3
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[resource]
+physics_layer_0/collision_layer = 64
+sources/0 = SubResource("TileSetAtlasSource_ytc0w")
