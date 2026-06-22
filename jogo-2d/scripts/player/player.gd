@@ -4,7 +4,7 @@ extends CharacterBody2D
 @onready var hit_box_collision_shape: CollisionShape2D = $Hitbox/HitBoxCollisionShape
 @onready var left_wall_detector: RayCast2D = $LeftWallDetector
 @onready var right_wall_detector: RayCast2D = $RightWallDetector
-
+@onready var reload_scene: Timer = $ReloadScene
 
 
 enum PlayerState{
@@ -25,7 +25,6 @@ var status: PlayerState
 var direction = 0
 var jump_count = 0
 var jump_by_wall = 70
-var swimming_force = 70
 
 @export var max_jump_count = 2
 @export var max_speed = 180.0
@@ -33,7 +32,10 @@ var swimming_force = 70
 @export var deceleration = 400
 @export var slide_deceleration = 100
 @export var wall_acceleration = 40
-@onready var reload_scene: Timer = $ReloadScene
+@export var water_max_speed = 100
+@export var water_acceleration = 200
+@export var swimming_force = -100
+
 
 func _ready() -> void:
 	go_to_idle_state()
@@ -104,7 +106,9 @@ func go_to_slide_state():
 	anim.play("slide")
 	set_small_collider()
 	
+	
 func go_to_swimming_state():
+	velocity.y = min(velocity.y, 150)
 	status = PlayerState.swimming
 	anim.play("swimming")
 	return
@@ -135,15 +139,16 @@ func exit_from_slide_state():
 func idle_state(delta):
 	apply_gravity(delta)
 	move(delta)
-	if velocity.x != 0:
-		go_to_walk_state()
-		return
 	if Input.is_action_just_pressed("jump"):
 		go_to_jump_state()
 		return		
 	if Input.is_action_just_pressed("down_grade"):
 		go_to_down_grade_state()
 		return
+	if velocity.x != 0:
+		go_to_walk_state()
+		return
+	
 
 func walk_state(delta):
 	apply_gravity(delta)
@@ -194,6 +199,9 @@ func fall_state(delta):
 				
 func down_grade_state(delta):
 	apply_gravity(delta)
+	if Input.is_action_just_pressed("jump") && can_jump():
+		go_to_jump_state()
+		return
 	if Input.is_action_just_released("down_grade") and velocity.x == 0:
 		exit_from_down_grade_state()
 		go_to_idle_state()
@@ -202,6 +210,9 @@ func down_grade_state(delta):
 func slide_state(delta):
 	apply_gravity(delta)
 	velocity.x = move_toward(velocity.x, 0, slide_deceleration * delta)
+	if Input.is_action_just_pressed("jump") && can_jump():
+		go_to_jump_state()
+		return
 	if Input.is_action_just_released("down_grade") or velocity.x == 0:
 		exit_from_slide_state()
 	if Input.is_action_pressed("down_grade") and velocity.x == 0:
@@ -209,7 +220,7 @@ func slide_state(delta):
 		return
 		
 func wall_slide_state(delta):
-	jump_count = 1
+	jump_count = 0
 	if Input.is_action_just_pressed("jump") && can_jump():
 		go_to_jump_state()
 		return
@@ -230,15 +241,13 @@ func swimming_state(delta):
 	update_direction()
 	
 	if direction:
-		velocity.x = move_toward(velocity.x, 100 * direction, 200 * delta)
+		velocity.x = move_toward(velocity.x, water_max_speed * direction, water_acceleration * delta)
 	else:
-		velocity.x = move_toward(velocity.x, 0, 200 * delta)
-	var vertical_direction = Input.get_axis("jump","down_grade")
-	if vertical_direction:
-		velocity.y =  move_toward(velocity.y, 100 * vertical_direction, 200 * delta)
-	else:
-		velocity.y = move_toward(velocity.y, 0, 200 * delta)
-	
+		velocity.x = move_toward(velocity.x, 0, water_acceleration * delta)
+	velocity.y += water_acceleration * delta
+	velocity.y = min(velocity.y, water_max_speed)
+	if Input.is_action_just_pressed("jump"):
+		velocity.y = swimming_force
 func dead_state(delta):
 	apply_gravity(delta)
 	
@@ -302,7 +311,10 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 		go_to_dead_state()
 	elif body.is_in_group("Water"):
 		go_to_swimming_state()
-	
+func _on_hitbox_body_exited(body: Node2D) -> void:
+	if body.is_in_group("Water"):
+		jump_count = 0
+		go_to_jump_state()
 	
 func _on_reload_scene_timeout() -> void:
 	get_tree().reload_current_scene()

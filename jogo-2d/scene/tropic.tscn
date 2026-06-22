@@ -11,8 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://byndv5mtfbbcs" path="res://sprites/tiles/3 - Tropics/Background parts/2 - Waters_version_2.png" id="5_34ia6"]
 [ext_resource type="PackedScene" uid="uid://bqvegu4rn34p7" path="res://entities/camera.tscn" id="6_34ia6"]
 [ext_resource type="Texture2D" uid="uid://c1yk45r8nkath" path="res://sprites/tiles/3 - Tropics/Background parts/6 - Distant_water.png" id="9_ytc0w"]
-[ext_resource type="PackedScene" uid="uid://db4asd60opi0g" path="res://entities/skeleton.tscn" id="11_t8vtq"]
+[ext_resource type="PackedScene" uid="uid://db4asd60opi0g" path="res://entities/enemies/skeleton/skeleton.tscn" id="11_t8vtq"]
 [ext_resource type="TileSet" uid="uid://caau5a3f3rl50" path="res://tiles/under_water.tres" id="12_ytc0w"]
+[ext_resource type="PackedScene" uid="uid://cop0n3bxtehra" path="res://entities/misc/moving_platform.tscn" id="14_xflqb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d18o5"]
 size = Vector2(60, 281)
@@ -143,4 +144,11 @@ collision_visibility_mode = 1
 [node name="Player" parent="." unique_id=923009179 instance=ExtResource("1_bmxgx")]
 position = Vector2(83, 155)
 
+[node name="MovingPlatform" parent="." unique_id=333358622 instance=ExtResource("14_xflqb")]
+position = Vector2(144, 136)
+
+[node name="Target" parent="MovingPlatform" index="2" unique_id=922183964]
+position = Vector2(0, -128)
+
 [editable path="Scenary/LevelEnd"]
+[editable path="MovingPlatform"]

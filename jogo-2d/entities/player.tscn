@@ -248,7 +248,8 @@ size = Vector2(12, 17)
 
 [node name="Player" type="CharacterBody2D" unique_id=923009179 groups=["Player"]]
 z_index = 1
-collision_mask = 2
+collision_mask = 130
+platform_on_leave = 2
 script = ExtResource("1_merdl")
 
 [node name="Player_Collision" type="CollisionShape2D" parent="." unique_id=935325945]
@@ -256,8 +257,7 @@ shape = SubResource("CapsuleShape2D_b0kkn")
 
 [node name="Player_Anim" type="AnimatedSprite2D" parent="." unique_id=224090389]
 sprite_frames = SubResource("SpriteFrames_i623q")
-animation = &"swimming"
-frame_progress = 0.37294123
+animation = &"idle"
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=978735673 groups=["Player"]]
 collision_mask = 84
@@ -280,4 +280,5 @@ collision_mask = 2
 
 [connection signal="area_entered" from="Hitbox" to="." method="_on_hit_box_area_entered"]
 [connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
+[connection signal="body_exited" from="Hitbox" to="." method="_on_hitbox_body_exited"]
 [connection signal="timeout" from="ReloadScene" to="." method="_on_reload_scene_timeout"]
