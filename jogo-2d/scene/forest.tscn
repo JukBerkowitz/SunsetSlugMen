@@ -11,9 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://x3e0vraoii8i" path="res://sprites/tiles/2 - Autumn Forest/Background parts/1 - Leaf_top.png" id="8_64es3"]
 [ext_resource type="Texture2D" uid="uid://b3sf3cheocq2q" path="res://sprites/tiles/2 - Autumn Forest/Terrain (16 x 16).png" id="10_jxvlp"]
 [ext_resource type="TileSet" uid="uid://bpaeqakyp638l" path="res://tiles/decoration.tres" id="11_gwku7"]
-[ext_resource type="PackedScene" uid="uid://c6ufubnrl3wnl" path="res://entities/level_end.tscn" id="12_64es3"]
 [ext_resource type="Texture2D" uid="uid://1ub465hr3h4k" path="res://sprites/tiles/5 - Misc. universal tiles/Lava_frames (16 x 32).png" id="12_ja8kk"]
 [ext_resource type="PackedScene" uid="uid://db4asd60opi0g" path="res://entities/enemies/skeleton/skeleton.tscn" id="13_kmspj"]
+[ext_resource type="PackedScene" uid="uid://dg67sphpyk6rw" path="res://entities/misc/broken_block.tscn" id="15_boiax"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gwku7"]
 texture = ExtResource("10_jxvlp")
@@ -89,14 +89,6 @@ limit_top = 0
 limit_right = 1600
 
 [node name="Scenary" type="Node" parent="." unique_id=1508424759]
-
-[node name="LevelEnd" parent="Scenary" unique_id=1808726932 instance=ExtResource("12_64es3")]
-position = Vector2(1287, 11)
-collision_layer = 8
-
-[node name="CollisionShape2D" parent="Scenary/LevelEnd" index="0" unique_id=1688288242]
-position = Vector2(71, 56)
-scale = Vector2(6.7303305, 10.942093)
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="Scenary" unique_id=984939407]
 
@@ -192,6 +184,17 @@ tile_map_data = PackedByteArray("AAATAAkAAAAAAAAAAAATAAoAAAAAAAEAAAAUAAkAAAAAAAA
 tile_set = SubResource("TileSet_0xhum")
 collision_visibility_mode = 1
 
+[node name="LimitLevel" type="StaticBody2D" parent="Scenary" unique_id=1289632048]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Scenary/LimitLevel" unique_id=918935312]
+light_mask = 2
+position = Vector2(0, 100)
+shape = SubResource("RectangleShape2D_ja8kk")
+
+[node name="BrokenBlock" parent="Scenary" unique_id=242293310 instance=ExtResource("15_boiax")]
+position = Vector2(927, 102)
+
 [node name="Enemies" type="Node" parent="." unique_id=318133908]
 
 [node name="Skeleton" parent="Enemies" unique_id=903178935 instance=ExtResource("13_kmspj")]
@@ -205,13 +208,3 @@ position = Vector2(85, 158)
 
 [node name="Player" parent="." unique_id=923009179 instance=ExtResource("1_e2knd")]
 position = Vector2(1032, 61)
-
-[node name="LimitLevel" type="StaticBody2D" parent="." unique_id=1289632048]
-collision_layer = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="LimitLevel" unique_id=918935312]
-light_mask = 2
-position = Vector2(0, 100)
-shape = SubResource("RectangleShape2D_ja8kk")
-
-[editable path="Scenary/LevelEnd"]
