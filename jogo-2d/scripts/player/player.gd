@@ -28,8 +28,8 @@ var jump_by_wall = 70
 
 @export var max_jump_count = 2
 @export var max_speed = 180.0
-@export var acceleration = 400
-@export var deceleration = 400
+@export var acceleration = 500
+@export var deceleration = 500
 @export var slide_deceleration = 100
 @export var wall_acceleration = 40
 @export var water_max_speed = 100
@@ -160,6 +160,7 @@ func walk_state(delta):
 	if Input.is_action_just_pressed("jump"):
 		go_to_jump_state()
 		return	
+		
 	if Input.is_action_just_pressed("down_grade"):
 		go_to_slide_state()
 		return
