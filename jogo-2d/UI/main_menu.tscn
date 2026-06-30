@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://chcm57xe2warx"]
 
+[ext_resource type="Script" uid="uid://dk35hmyfap6dm" path="res://scripts/UI_scripts/main_menu.gd" id="1_p8ccj"]
+
 [node name="MainMenu" type="Control" unique_id=18102451]
 layout_mode = 3
 anchors_preset = 15
@@ -7,6 +9,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_p8ccj")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1738070908]
+position = Vector2(144, 96)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1752376723]
 layout_mode = 1
@@ -37,18 +43,20 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Host
 "
+alignment = 0
 
-[node name="PlayButton" type="Button" parent="." unique_id=134650272]
+[node name="JoinButton" type="Button" parent="." unique_id=134650272]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.6822917
 anchor_top = 0.49759614
 anchor_right = 0.6822917
 anchor_bottom = 0.49759614
-offset_left = -46.5
+offset_left = -44.5
 offset_top = -15.5
-offset_right = -5.5
+offset_right = -3.5
 offset_bottom = 15.5
 grow_horizontal = 2
 grow_vertical = 2
-text = "Play"
+text = "Join"
+alignment = 2
